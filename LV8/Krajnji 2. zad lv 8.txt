@@ -1,0 +1,264 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+
+ struct podaci
+{		
+	char prezime[20];
+	char ime[20];
+	int sifra;
+	char adresa[100];
+	int br_tel;
+};
+
+
+struct posudba{
+	char ime_filma[20];
+	int datum;
+	int sif;
+};
+
+
+void funKreiraj();
+void funCitaj();
+struct podaci dodaj();
+void zatvori();
+int kolikoPosudi();
+void podaci();
+//int pregledajSifre(FILE *infile, POSUDI *film, int );
+//int pregledajPosudbe(FILE *outfile, POSUDI* film, int );
+void posudi( int );
+//void usporedi(FILE *infile, FILE *outfile, int brFilm, int );
+
+FILE *infile;
+    FILE *outfile;
+
+int main(){
+    
+    struct podaci clanovi[30]={0};
+    struct posudba film[20]={0};
+    int sifrica;
+    int brF;
+    char br;
+    printf("1- Kreiranje datoteke clanovi.txt\n2- Čitanje iz datoteke Clanovi.txt\n3- Dodavanje novih članova u Clanovi.txt\n4- Posudba filma\n5- Završetak programa\n");
+ 
+    
+    
+    
+    do{ 
+        printf("Odaberite mogucnost: ");  
+        scanf("%c", &br);
+        getchar();
+        
+        switch(br){
+            case '1':
+                funKreiraj();
+                break;
+            case '2':
+                funCitaj();
+                break;
+            case '3':
+                dodaj(clanovi);
+                break;
+            case '4':
+               brF=kolikoPosudi();
+                
+                 printf("Unesite sifru clana:\n");
+                 scanf("%d", &sifrica);
+                 getchar();
+                 
+                 
+                posudi(brF);
+                //pregledajPosudbe(outfile, film, sifrica);
+                
+                break;
+        
+            default:
+    
+                fclose(infile);
+                exit(EXIT_FAILURE);
+                break;
+        }
+        
+    }while(br!= 5);
+ 
+    
+    return 0;
+}
+
+
+void funKreiraj() {
+    FILE* infile= fopen("clanovi.txt", "wb+");
+    if(infile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    
+    fclose(infile);
+    
+    FILE *outfile= fopen("posudba.txt", "wb+");
+    if(outfile== NULL){
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+    
+    fclose(outfile);
+    
+    FILE* smece;
+     smece = fopen ("posudba","wb+");
+    if (smece == NULL){
+        printf ("Greska.\n");
+        exit(EXIT_FAILURE);
+    }
+    fclose (smece);
+   
+   
+}
+
+void funCitaj() {
+    
+    FILE* infile= fopen("clanovi.txt", "rb");
+    if(infile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    int i;
+    struct podaci *clanovi;
+    fseek(infile,0L,SEEK_END);
+    int n=(int)ftell(infile)/sizeof(struct podaci);
+    rewind(infile);
+    clanovi=(struct podaci*)malloc(n*sizeof(struct podaci));
+    for(i=0;i<n;i++){
+    fread(&clanovi[i], sizeof(struct podaci), 1, infile);
+    printf("prezime%s ime%s sifra%d adresa%s telefon%d",clanovi[i].prezime,clanovi[i].ime,clanovi[i].sifra,clanovi[i].adresa,clanovi[i].br_tel);
+    }
+    fclose(infile);
+    free(clanovi);
+}
+
+struct podaci dodaj(){
+    
+    FILE* infile= fopen("clanovi.txt", "ab");
+    if(infile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    
+       struct podaci osoba;
+
+    
+    printf("Unesite prezime\n");
+    scanf("%s", osoba.prezime);
+    
+    printf("Unesite ime\n");
+    scanf("%s", osoba.ime);
+    
+    printf("Unesite sifru\n");
+    scanf("%d", &osoba.sifra);
+    getchar();
+    
+    printf("Unesite adresu:\n");
+    fgets(osoba.adresa, 100, stdin);
+    
+    printf("Unesite broj telefona:\n");
+    scanf("%d", &osoba.br_tel);
+    getchar();
+    
+    fwrite(&osoba, sizeof(struct podaci), 1, infile);
+    
+    
+    fclose(infile);
+    
+}
+
+/*pitati koliko se filmova želi posuditi (ne više od 4)
+- za svaki film unijeti: ime filma, datum posudbe (broj manji od 365 koji
+označava dan u godini) i šifra člana koji je posudio film.
+- Sve te podatke o posuđenom filmu spremiti u datoteku posudbe.txt*/
+
+int kolikoPosudi(){
+    int n;
+    printf("Koliko filmova zelite posuditi?\n");
+    do{
+        scanf("%d", &n);
+    }while(n<1 || n>4);
+    
+    return n;
+}
+
+
+/*
+int pregledajSifre(FILE *infile, POSUDI *film, int sifrica){
+    
+     infile= fopen("clanovi.txt", "rb");
+    if(infile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    
+    rewind(infile);
+    CLAN clanovi;
+   // clanovi.sifra=sifrica;
+    while(fread(&clanovi, sizeof(CLAN),1, infile) == 1){
+        if(clanovi.sifra == film->sif)
+            return 1;
+    }
+    
+    fclose(infile);
+    return 0;
+}*/
+
+/*int pregledajPosudbe(FILE *outfile, POSUDI* film, int sifrica){
+    
+    outfile= fopen("posudbe.txt", "rb");
+    if(outfile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    POSUDI countF;
+    //countF.sif=sifrica;
+    int brojac=0;
+    rewind(outfile);
+    
+    while(fread(&countF, sizeof(POSUDI), 1, outfile)== 1 ){
+        if(countF.sif == film->sif)
+            brojac++;
+        if(brojac >= 4)
+            return 0;
+        
+    }
+    return 1;
+    fclose(outfile);
+}*/
+
+
+void posudi( int brF){
+    
+    
+    outfile= fopen("posudba.txt", "ab");
+    if(outfile==NULL){
+        perror("Greska");
+        exit (EXIT_FAILURE);
+    }
+    
+    struct posudba *film=(struct posudba*)malloc(brF*sizeof(struct posudba)); 
+    int i=0;
+     for(i=0;i<brF;i++){
+        printf("Unesite naziv filma:\n");
+        scanf("%[^\n]s", film[i].ime_filma); 
+       
+        do{
+            printf("Unesite datum posudbe od 0-365:\n");
+            scanf("%d", &film[i].datum);
+            getchar();
+            
+        }while((film[i].datum)<0 || (film[i].datum)>365 );   
+         
+    
+    fwrite(&film[i], sizeof(struct posudba),1, outfile);
+     }
+   
+    fclose(outfile);
+    free(film);
+    
+}

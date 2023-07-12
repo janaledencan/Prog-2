@@ -1,0 +1,150 @@
+Zadatak 1.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+    char *mjeseci[] = { "sijecanj", "veljaca", "ozujak",
+					    "travanj", "svibanj", "lipanj",
+						"srpanj", "kolovoz", "rujan",
+						"listopad","studeni", "prosinac" };
+
+	int unos;
+	scanf("%d", &unos);
+
+	switch(unos){
+		case 1: printf("\n%s", mjeseci[0]); break;
+		case 2: printf("\n%s", mjeseci[1]); break;
+		case 3: printf("\n%s", mjeseci[2]); break;
+		case 4: printf("\n%s", mjeseci[3]); break;
+		case 5: printf("\n%s", mjeseci[4]); break;
+		case 6: printf("\n%s", mjeseci[5]); break;
+		case 7: printf("\n%s", mjeseci[6]); break;
+		case 8: printf("\n%s", mjeseci[7]); break;
+		case 9: printf("\n%s", mjeseci[8]); break;
+		case 10: printf("\n%s", mjeseci[9]); break;
+		case 11: printf("\n%s", mjeseci[10]); break;
+		case 12: printf("\n%s", mjeseci[11]); break;
+
+		default: printf("\n%s", "Nekorektan broj mjeseca."); break;
+	}
+
+    return 0;
+}
+
+//////////////////////////////////////////////
+
+Zadatak 2.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int maxElement(int (*p)[8], int n, int m){
+    int max = p[0][0];
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(p[i][j] > max) max = p[i][j];
+        }
+    }
+
+    return max;
+}
+
+int main()
+{
+    int n, m;
+    int matrica[5][8];
+    int (*p)[8] = matrica[0];
+
+    printf("Redovi: ");
+    do{
+        scanf("%d", &n);
+    }while(n < 2 || n > 5);
+
+    printf("Stupci: ");
+    do{
+        scanf("%d", &m);
+    }while(m < 2 || m > 8);
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            scanf("%d", &matrica[i][j]);
+        }
+    }
+
+    printf("\n");
+     for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+           printf("%d ", matrica[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("\n%d", maxElement(p, n, m));
+
+    return 0;
+}
+
+///////////////////////////////////////////////
+
+Zadatak 3.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void umnozak(int (*p)[10], int n, int m, int k){
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            p[i][j] *= k;
+        }
+    }
+
+    printf("\n");
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            printf("%d ", p[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    int n, m, k;
+    int matrica[10][10];
+    int (*p)[10] = matrica[0];
+
+    printf("Redovi: ");
+    do{
+        scanf("%d", &n);
+    }while(n < 2 || n > 10);
+
+    printf("Stupci: ");
+    do{
+        scanf("%d", &m);
+    }while(m < 2 || m > 10);
+
+    printf("Skalar k: ");
+    scanf("%d", &k);
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            scanf("%d", &matrica[i][j]);
+        }
+    }
+
+    printf("\n");
+     for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+           printf("%d ", matrica[i][j]);
+        }
+        printf("\n");
+    }
+
+   umnozak(p, n, m, k);
+
+   return 0;
+}

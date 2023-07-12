@@ -1,0 +1,84 @@
+#include<stdio.h>
+  #include<stdlib.h>
+  
+  typedef struct car{
+  	
+  	char *marka;
+  	char *model;
+  	int brKonja;
+  	int speed;
+  	int price;
+  }AUTO;
+  
+  void unos(AUTO *auti, int br){
+  	
+  	int i;
+  	
+  	for(i=0; i<br; i++){
+  		printf("Unesite % d marku automobila, model, broj konja, najvecu brzinu i cijenu:\n", i+1);
+  		
+  		(auti[i].marka) = (char*)malloc(100* sizeof(char));
+  		if((auti[i].marka) ==NULL){
+            printf("Error marka");
+  			exit(EXIT_FAILURE);
+		  }
+		  
+		(auti[i].model) = (char*)malloc(100* sizeof(char));
+  		if((auti[i].model) ==NULL){
+  			printf("error model");
+  			exit(EXIT_FAILURE);
+		  }
+  		scanf("%s", auti[i].marka);  //& ne
+  		scanf("%s", auti[i].model);
+  		scanf("%d", &(auti[i].brKonja));
+  		scanf("%d", &auti[i].speed);
+  		scanf("%d", &(auti[i].price)); getchar();
+  		
+	  }
+  	
+  }
+  
+  void ispis(AUTO *auti, int br){
+  	
+  	int i;
+  	for(i=0; i<br; i++){
+  		
+  		printf("Marka %d automobila: %s\n", i+1, auti[i].marka);
+  		printf("Model automobila: %s\n", auti[i].model);
+  		printf("Broj konja: %d\n", auti[i].brKonja);
+  		printf("Maksimalna brzina: %d\n", auti[i].speed);
+  		printf("Cijena: %d\n", auti[i].price);
+  		
+  		printf("\n");
+    }
+  }
+  
+  int main(){
+  	
+  	int brAuta;
+  	
+  	printf("Unesite zeljeni broj automobila:\n");
+  	scanf("%d", &brAuta);
+  	
+  	AUTO *auti = NULL;
+  	
+    auti = (AUTO*)malloc(brAuta* sizeof(AUTO));
+  	if(auti==NULL){
+  		perror("zauzimanje polja");
+  		return 2;
+	  }
+  	
+  	unos(auti, brAuta);
+  	ispis(auti, brAuta);
+  	
+  	
+  	int i;
+  	for(i=0; i< brAuta; i++){
+  		
+  		free(auti[i].marka);
+  		free(auti[i].model);
+	  }
+	  free(auti);
+  
+  	return 0;
+  }
